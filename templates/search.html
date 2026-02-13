@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block title %}Поиск: {{query}}{% endblock %}
+
+{% block content %}
+<div class="container mb-3">
+    <h2>Поиск по запросу: {{query}}</h2>
+    <p>Результатов в поиске по словоформе: {{word_number}}</p>
+    <p>Результатов в поиске по лемме: {{lemma_number}}</p>
+    <p>Всего: {{result_number}}</p>
+</div>
+{% with words=words%}
+    {% include 'words.html'%}
+{% endwith%}
+
+
+{% endblock %}

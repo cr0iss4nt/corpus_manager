@@ -48,9 +48,11 @@ def get_words(query = ''):
     t1 = time.time()
 
     cursor.execute("""
-    SELECT * FROM Corpus WHERE word LIKE ?
-    ORDER BY id
-    """, ('%' + query + '%',))
+        SELECT DISTINCT * FROM
+        Corpus
+        WHERE word LIKE ? OR lemma LIKE ?
+        ORDER BY id
+        """, ('%' + query + '%', '%' + query + '%'))
     words = cursor.fetchall()
 
     connection.close()
@@ -58,7 +60,10 @@ def get_words(query = ''):
     dt = time.time()-t1
     print(f"Fetched words (query='{query}') in {dt} seconds")
 
-    return words
+    word_number = len([i for i in words if query in i[1]])
+    lemma_number = len([i for i in words if query in i[2]])
+
+    return words, word_number, lemma_number
 
 def add_word(word, lemma, part_of_speech, book, connection=None):
     has_outer_connection = True
