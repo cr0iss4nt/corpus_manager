@@ -75,13 +75,15 @@ def fill():
     return redirect(url_for('index'))
 """
 
-@app.route('/export')
-def export_dictionary():
+@app.route('/export', methods=['POST'])
+def export_corpus():
     try:
-        content = db.db_to_text()
+        query = request.form['query']
+        words, _, _ = db.get_words(query)
+        content = db.db_to_text(words)
 
         from datetime import datetime
-        filename = f'dictionary_{datetime.today().strftime("%Y%m%d%H%M%S")}.txt'
+        filename = f'corpus_{datetime.today().strftime("%Y%m%d%H%M%S")}.txt'
 
         file_data = BytesIO(content.encode('utf-8'))
 
@@ -95,3 +97,8 @@ def export_dictionary():
     except Exception as e:
         print(f"Export error: {e}")
         return "Error during export", 500
+
+@app.route('/build', methods=['POST'])
+def build():
+    db.build_corpus(morph)
+    return redirect(url_for('index'))

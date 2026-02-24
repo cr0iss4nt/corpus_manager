@@ -60,8 +60,8 @@ def get_words(query = ''):
     dt = time.time()-t1
     print(f"Fetched words (query='{query}') in {dt} seconds")
 
-    word_number = len([i for i in words if query in i[1]])
-    lemma_number = len([i for i in words if query in i[2]])
+    word_number = len([i for i in words if query.lower() in i[1].lower()])
+    lemma_number = len([i for i in words if query.lower() in i[2].lower()])
 
     return words, word_number, lemma_number
 
@@ -114,7 +114,7 @@ def build_corpus(morph: pymorphy3.MorphAnalyzer(), directory=BOOKS_FOLDER):
     connection.commit()
     connection.close()
     dt = time.time() - t1
-    print(f"Corpus from {directory} built in {dt} seconds")
+    print(f"Corpus built from {directory} in {dt} seconds")
 
 
 # change the base and the ending of the word
@@ -144,8 +144,7 @@ def build_corpus(morph: pymorphy3.MorphAnalyzer(), directory=BOOKS_FOLDER):
 #    connection.commit()
 #    connection.close()
 
-def db_to_text():
-    words = get_words()
+def db_to_text(words):
     output = []
     for word in words:
         output.append(f"""{word[1].upper()}
