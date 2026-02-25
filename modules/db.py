@@ -117,6 +117,7 @@ def add_words_from_file(filename, morph: pymorphy3.MorphAnalyzer(), connection=N
     print(f"Added words from {filename} in {dt} seconds")
 
 def build_corpus(morph: pymorphy3.MorphAnalyzer(), directory=BOOKS_FOLDER):
+    clear_db()
     filenames = get_files_in_directory(directory)
     connection = sqlite3.connect(DATABASE_NAME)
     t1 = time.time()
