@@ -5,9 +5,37 @@
 {% block content %}
 <div class="container mb-3">
     <h2>Поиск по запросу: {{query}}</h2>
-    <p>Результатов поиска по словоформе: {{word_number}}</p>
+    <!--<p>Результатов поиска по словоформе: {{word_number}}</p>
     <p>Результатов поиска по лемме: {{lemma_number}}</p>
-    <p>Всего: {{result_number}}</p>
+    <p>Всего: {{result_number}}</p>-->
+
+    <div class="container">
+        <div class="row">
+            <div class="col-4">
+                {% with word_number=word_number, lemma_number=lemma_number, result_number=result_number%}
+                    {% include 'results.html'%}
+                {% endwith%}
+            </div>
+            <div class="col-4">
+                {% with frequency=freq1%}
+                    {% if freq1 %}
+                    {% include 'frequency_analysis.html'%}
+                    {% endif %}
+                {% endwith%}
+            </div>
+            <div class="col-4">
+                {% with frequency=freq2%}
+                    {% if freq2 %}
+                    {% include 'frequency_analysis.html'%}
+                    {% endif %}
+                {% endwith%}
+            </div>
+        </div>
+    </div>
+
+
+
+
     <button onclick="exportDictionary()" class="btn btn-sm btn-primary">
         <i class="bi bi-upload"></i> Экспорт
     </button>

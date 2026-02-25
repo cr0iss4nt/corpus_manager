@@ -52,7 +52,7 @@ def get_words(query = ''):
         SELECT DISTINCT * FROM
         Corpus
         WHERE word LIKE ? OR lemma LIKE ?
-        ORDER BY id
+        ORDER BY book, word
         """, ('%' + query + '%', '%' + query + '%'))
     words = cursor.fetchall()
 
