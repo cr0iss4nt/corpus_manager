@@ -32,9 +32,16 @@
                 </form>
             </div>
 
-            <div class="col-md-2 col-sm-6 d-flex justify-content-end">
+            <div class="col-md-1 col-sm-6 d-flex justify-content-end">
                 <a href="{{ url_for('info') }}" class="btn btn-sm btn-info" style="width: 50px;">
                     <i class="bi bi-info"></i>
+                </a>
+            </div>
+
+            <div class="col-md-1 col-sm-6 d-flex justify-content-end">
+                <a href="{{ url_for('build') }}" class="btn btn-sm btn-danger" style="width: 50px;"
+                onclick="return confirm('Пересобрать корпус текстов?')">
+                    <i class="bi bi-tools"></i>
                 </a>
             </div>
         </div>
