@@ -59,7 +59,7 @@ def get_words(query = ''):
     connection.close()
 
     dt = time.time()-t1
-    print(f"Fetched words (query='{query}') in {dt} seconds")
+    print(f"Fetched words (query='{query}') in {dt:.3f} seconds")
 
     word_number = len([i for i in words if query.lower() in i[1].lower()])
     lemma_number = len([i for i in words if query.lower() in i[2].lower()])
@@ -114,7 +114,7 @@ def add_words_from_file(filename, morph: pymorphy3.MorphAnalyzer(), connection=N
     if not has_outer_connection:
         connection.commit()
         connection.close()
-    print(f"Added words from {filename} in {dt} seconds")
+    print(f"Added words from {filename} in {dt:.3f} seconds")
 
 def build_corpus(morph: pymorphy3.MorphAnalyzer(), directory=BOOKS_FOLDER):
     clear_db()
@@ -126,7 +126,7 @@ def build_corpus(morph: pymorphy3.MorphAnalyzer(), directory=BOOKS_FOLDER):
     connection.commit()
     connection.close()
     dt = time.time() - t1
-    print(f"Corpus built from {directory} in {dt} seconds")
+    print(f"Corpus built from {directory} in {dt:.3f} seconds")
 
 def db_to_text(words):
     output = []
