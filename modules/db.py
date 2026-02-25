@@ -21,6 +21,7 @@ def init_db():
     word TEXT NOT NULL,
     lemma TEXT NOT NULL,
     part_of_speech TEXT,
+    features TEXT,
     book TEXT NOT NULL
     )
     ''')
@@ -65,7 +66,7 @@ def get_words(query = ''):
 
     return words, word_number, lemma_number
 
-def add_word(word, lemma, part_of_speech, book, connection=None):
+def add_word(word, lemma, part_of_speech, features, book, connection=None):
     has_outer_connection = True
     if connection is None:
         has_outer_connection = False
@@ -74,13 +75,13 @@ def add_word(word, lemma, part_of_speech, book, connection=None):
 
     try:
         cursor.execute('''
-        INSERT INTO Corpus(word, lemma, part_of_speech, book)
+        INSERT INTO Corpus(word, lemma, part_of_speech, features, book)
         VALUES
-        (?, ?, ?, ?)
-        ''', (word, lemma, part_of_speech, book))
+        (?, ?, ?, ?, ?)
+        ''', (word, lemma, part_of_speech, features, book))
         print(f"Added word: {word}")
-    except:
-        print(f"Error adding word: {word}")
+    except Exception as e:
+        print(f"Error adding word: {word}\nError: {e}")
 
     if not has_outer_connection:
         connection.commit()
@@ -96,9 +97,19 @@ def add_words_from_file(filename, morph: pymorphy3.MorphAnalyzer(), connection=N
         connection = sqlite3.connect(DATABASE_NAME)
     t1 = time.time()
     for lexeme in lexemes:
-        part_of_speech = morph.parse(lexeme[0])[0].tag.POS
+        tag = morph.parse(lexeme[0])[0].tag
+
+        try:
+            part_of_speech = morph.lat2cyr(tag.POS)
+        except:
+            part_of_speech = ""
+        try:
+            features = morph.lat2cyr(tag).split(' ')[1]
+        except:
+            features = ""
+
         add_word(word=lexeme[0], lemma=lexeme[1], part_of_speech=part_of_speech,
-                 book=filename, connection=connection)
+                 features=features, book=filename, connection=connection)
     dt = time.time()-t1
     if not has_outer_connection:
         connection.commit()
@@ -116,39 +127,12 @@ def build_corpus(morph: pymorphy3.MorphAnalyzer(), directory=BOOKS_FOLDER):
     dt = time.time() - t1
     print(f"Corpus built from {directory} in {dt} seconds")
 
-
-# change the base and the ending of the word
-#def edit_word(word, base, ending):
-#    connection = sqlite3.connect(DATABASE_NAME)
-#    cursor = connection.cursor()
-#
-#    cursor.execute('''
-#    UPDATE Dictionary
-#    SET base=?, ending=?
-#    WHERE word=?
-#    ''', (base, ending, word))
-#
-#   connection.commit()
-#   connection.close()
-
-
-#def delete_word(word):
-#    connection = sqlite3.connect(DATABASE_NAME)
-#    cursor = connection.cursor()
-#
-#    cursor.execute('''
-#    DELETE FROM Dictionary
-#    WHERE word=?
-#    ''', (word,))
-#
-#    connection.commit()
-#    connection.close()
-
 def db_to_text(words):
     output = []
     for word in words:
         output.append(f"""{word[1].upper()}
 Лемма: {word[2]}
 Часть речи: {word[3]}
-Источник: {word[4]}""")
+Характеристики: {word[4]}
+Источник: {word[5]}""")
     return '\n\n\n'.join(output)
