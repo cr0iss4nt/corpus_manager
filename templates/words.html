@@ -1,40 +1,39 @@
-<div class="container mb-3">
-    <!-- Filter checkbox -->
-    <!--
-    <div class="form-check mb-3">
-        <input class="form-check-input" type="checkbox" id="showInflectableOnly" onclick="filterInflectableWords()">
-        <label class="form-check-label" for="showInflectableOnly">
-            Показать только существительные, прилагательные и инфинитивы
-        </label>
-    </div>
-    -->
 
-    <div class="table-responsive">
-        <table class="table table-striped" id="wordsTable">
-            <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Слово</th>
-                    <th>Лемма</th>
-                    <th>Часть речи</th>
-                    <th>Характеристики</th>
-                    <th>Источник</th>
-                </tr>
-            </thead>
-            <tbody id="wordsTableBody">
-                {% for word in words %}
-                <tr class="word-row" data-part-of-speech="{{ word[3] }}">
-                    <td>{{ word[0] }}</td>
-                    <td>{{ word[1] }}</td>
-                    <td>{{ word[2] }}</td>
-                    <td>{{ word[3] }}</td>
-                    <td>{{ word[4] }}</td>
-                    <td>{{ word[5] }}</td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-    </div>
+<!-- Filter checkbox -->
+<!--
+<div class="form-check mb-3">
+    <input class="form-check-input" type="checkbox" id="showInflectableOnly" onclick="filterInflectableWords()">
+    <label class="form-check-label" for="showInflectableOnly">
+        Показать только существительные, прилагательные и инфинитивы
+    </label>
+</div>
+-->
+
+<div class="table-responsive">
+    <table class="table table-striped" id="wordsTable">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Слово</th>
+                <th>Лемма</th>
+                <th>Часть речи</th>
+                <th>Характеристики</th>
+                <th>Источник</th>
+            </tr>
+        </thead>
+        <tbody id="wordsTableBody">
+            {% for word in words %}
+            <tr class="word-row" data-part-of-speech="{{ word[3] }}">
+                <td>{{ word[0] }}</td>
+                <td>{{ word[1] }}</td>
+                <td>{{ word[2] }}</td>
+                <td>{{ word[3] }}</td>
+                <td>{{ word[4] }}</td>
+                <td>{{ word[5] }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
 </div>
 
 <script>

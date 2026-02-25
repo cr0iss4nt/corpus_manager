@@ -13,7 +13,7 @@ def search():
     frequency = analyze_pos_frequency(result)
     freq1, freq2 = split_dict(frequency)
     return render_template('search.html',
-                           query=query, words=result,
+                           query=query, words=result[:500],
                            word_number=word_number, lemma_number=lemma_number,
                            result_number=len(result),
                            freq1=freq1, freq2=freq2)

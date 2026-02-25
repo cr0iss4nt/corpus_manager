@@ -5,14 +5,16 @@
 {% block content %}
 <div class="container mb-3">
     <h2>Поиск по запросу: {{query}}</h2>
-    <!--<p>Результатов поиска по словоформе: {{word_number}}</p>
-    <p>Результатов поиска по лемме: {{lemma_number}}</p>
-    <p>Всего: {{result_number}}</p>-->
+
+    {% if result_number == 0 %}
+        <p>Результатов по данному запросу не дал результатов.</p>
+    {% else %}
+
 
     <div class="container">
         <div class="row">
             <div class="col-4">
-                {% with word_number=word_number, lemma_number=lemma_number, result_number=result_number%}
+                {% with word_number=word_number, lemma_number=lemma_number, result_number=result_number %}
                     {% include 'results.html'%}
                 {% endwith%}
             </div>
@@ -40,11 +42,15 @@
         <i class="bi bi-upload"></i> Экспорт
     </button>
     <form id="exportForm" action="/export" method="POST" style="display: none;">
-    <input type="hidden" name="query" value='{{query}}'>
-</form>
-</div>
+        <input type="hidden" name="query" value='{{query}}'>
+    </form>
 
-<script>
+    {% if result_number > 500 %}
+    <p>Показаны лишь первые 500 результатов для сохранения производительности.</p>
+    {% endif %}
+
+
+    <script>
     function exportDictionary() {
         // Create form data
         const formData = new FormData();
@@ -91,11 +97,13 @@
             alert('Ошибка при экспорте словаря');
         });
     }
-</script>
+    </script>
 
-{% with words=words%}
-    {% include 'words.html'%}
-{% endwith%}
+    {% with words=words%}
+        {% include 'words.html'%}
+    {% endwith%}
 
+    {% endif %}
 
+</div>
 {% endblock %}
