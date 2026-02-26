@@ -1,7 +1,7 @@
 from striprtf.striprtf import rtf_to_text
 from pathlib import Path
 import pdfplumber
-import docx2txt  # add import for docx parsing
+import docx2txt
 
 def parse_txt(filename):
     with open(filename, 'r', encoding='utf-8') as f:

@@ -1,4 +1,4 @@
-from flask import render_template, redirect, url_for, request
+from flask import render_template, request
 
 from modules.db import get_words
 from __main__ import app
