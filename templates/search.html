@@ -99,9 +99,20 @@
     }
     </script>
 
-    {% with words=words%}
-        {% include 'words.html'%}
-    {% endwith%}
+
+    <div class="row">
+        <div class="col-6">
+            {% with words=words%}
+                {% include 'words.html'%}
+            {% endwith%}
+        </div>
+        <div class="col-6">
+            {% with words=word_features%}
+                {% include 'word_features.html'%}
+            {% endwith%}
+        </div>
+    </div>
+
 
     {% endif %}
 

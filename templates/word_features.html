@@ -1,18 +1,20 @@
 <div class="table-responsive">
-    <table class="table table-striped" id="wordsTable">
+    <table class="table table-striped" id="wordFeaturesTable">
         <thead>
             <tr>
                 <th>Слово</th>
-                <th>Частота</th>
-                <th>Источник</th>
+                <th>Лемма</th>
+                <th>Часть речи</th>
+                <th>Характеристики</th>
             </tr>
         </thead>
-        <tbody id="wordsTableBody">
+        <tbody id="wordFeaturesTableBody">
             {% for word in words %}
             <tr>
+                <td>{{ word[0] }}</td>
                 <td>{{ word[1] }}</td>
                 <td>{{ word[2] }}</td>
-                <td>{{ word[6] }}</td>
+                <td>{{ word[3] }}</td>
             </tr>
             {% endfor %}
         </tbody>
