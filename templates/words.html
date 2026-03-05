@@ -13,7 +13,7 @@
             <tr>
                 <td>{{ word[1] }}</td>
                 <td>{{ word[2] }}</td>
-                <td>{{ word[6] }}</td>
+                <td> <a href="/file/{{word[6]}}">{{word[6]}}</a></td>
                 <td>
                     <form id="search-inclusions-form" method="POST" action="{{ url_for('search_inclusions') }}">
                         <input type="hidden" id="concordance_query" name="concordance_query" value="{{ word[1] }}">

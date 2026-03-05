@@ -1,11 +1,10 @@
 import os
 from io import BytesIO
 
-from flask import redirect, url_for, render_template, request, send_file
+from flask import redirect, url_for, request, send_file
 
 from modules import db
 from modules.db import clear_db
-from modules.file_parser import parse_file
 from __main__ import app, morph
 
 
@@ -14,6 +13,7 @@ def clear():
     clear_db()
     return redirect(url_for('index'))
 
+# TODO: fix export
 @app.route('/export', methods=['POST'])
 def export_corpus():
     try:

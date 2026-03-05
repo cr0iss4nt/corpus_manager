@@ -121,6 +121,7 @@ def add_words_from_file(filename, morph: pymorphy3.MorphAnalyzer(), connection=N
     if connection is None:
         has_outer_connection = False
         connection = sqlite3.connect(DATABASE_NAME)
+    clean_filename = filename.split('/')[-1]
     t1 = time.time()
     for lexeme in lexemes:
         tag = morph.parse(lexeme[0])[0].tag
@@ -135,7 +136,7 @@ def add_words_from_file(filename, morph: pymorphy3.MorphAnalyzer(), connection=N
             features = ""
 
         add_word(word=lexeme[0], lemma=lexeme[1], part_of_speech=part_of_speech,
-                 features=features, book=filename, connection=connection)
+                 features=features, book=clean_filename, connection=connection)
     dt = time.time()-t1
     if not has_outer_connection:
         connection.commit()

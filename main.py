@@ -18,6 +18,7 @@ import routes.database
 import routes.search
 import routes.info
 import routes.concordance
+import routes.files
 
 
 if __name__ == '__main__':

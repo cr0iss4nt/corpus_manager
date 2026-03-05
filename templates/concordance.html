@@ -5,7 +5,8 @@
 {% block content %}
 <div class="container mb-3">
     <h2>Конкорданс по запросу: {{concordance_query}}</h2>
-    <p>Источник: {{book}}</p>
+    <p>Источник: <a href="/file/{{book}}">{{book}}</a></p>
+
 
     <form id="back-to-search-form" method="POST" action="{{ url_for('search') }}">
         <input type="hidden" id="query" name="query" value="{{ query }}">
