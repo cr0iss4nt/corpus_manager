@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+{% block title %}Конкорданс: {{concordance_query}}{% endblock %}
+
+{% block content %}
+<div class="container mb-3">
+    <h2>Конкорданс по запросу: {{concordance_query}}</h2>
+
+    <form id="back-to-search-form" method="POST" action="{{ url_for('search') }}">
+        <input type="hidden" id="query" name="query" value="{{ query }}">
+        <button type="submit" class="btn btn-warning">
+            <i class="bi bi-arrow-left"></i> Вернуться
+        </button>
+    </form>
+
+    {% with concordance=concordance%}
+        {% include 'inclusions.html'%}
+    {% endwith%}
+
+
+</div>
+{% endblock %}

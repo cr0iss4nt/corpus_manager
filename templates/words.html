@@ -5,6 +5,7 @@
                 <th>Слово</th>
                 <th>Частота</th>
                 <th>Источник</th>
+                <th></th>
             </tr>
         </thead>
         <tbody id="wordsTableBody">
@@ -13,6 +14,15 @@
                 <td>{{ word[1] }}</td>
                 <td>{{ word[2] }}</td>
                 <td>{{ word[6] }}</td>
+                <td>
+                    <form id="search-inclusions-form" method="POST" action="{{ url_for('search_inclusions') }}">
+                        <input type="hidden" id="concordance_query" name="concordance_query" value="{{ word[1] }}">
+                        <input type="hidden" id="query" name="query" value="{{ query }}">
+                        <button type="submit" class="btn btn-info">
+                            <i class="bi bi-bookmark"></i>
+                        </button>
+                    </form>
+                </td>
             </tr>
             {% endfor %}
         </tbody>

@@ -1,0 +1,18 @@
+<div class="table-responsive">
+    <table class="table table-striped" id="concordanceTable">
+        <thead>
+            <tr>
+                <th>Контекст</th>
+                <th>Источник</th>
+            </tr>
+        </thead>
+        <tbody id="concordanceTableBody">
+            {% for inclusion in concordance %}
+            <tr>
+                <td>{{ inclusion[0] }}</td>
+                <td>{{ inclusion[1] }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
