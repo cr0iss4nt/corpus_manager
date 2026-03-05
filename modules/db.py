@@ -10,6 +10,7 @@ from modules.directory_file_finder import get_files_in_directory
 
 DATABASE_NAME = 'corpus.db'
 BOOKS_FOLDER = 'books/'
+CONTEXT_SIZE = 5
 
 def init_db():
     connection = sqlite3.connect(DATABASE_NAME)
@@ -162,3 +163,34 @@ def db_to_text(words):
 Характеристики: {word[4]}
 Источник: {word[5]}""")
     return '\n\n\n'.join(output)
+
+
+def get_concordance(query):
+    connection = sqlite3.connect('corpus.db')
+    cursor = connection.cursor()
+
+    t1 = time.time()
+
+    cursor.execute("""
+                    SELECT DISTINCT id
+                    FROM Corpus
+                    WHERE word = ?
+                    """, (query,))
+    ids = [int(i[0]) for i in cursor.fetchall()]
+
+    concordance = []
+    for word_id in ids:
+        cursor.execute("""
+                    SELECT DISTINCT word, book
+                    FROM Corpus
+                    WHERE id BETWEEN ? AND ?
+                    """, (word_id - CONTEXT_SIZE, word_id + CONTEXT_SIZE))
+        context = cursor.fetchall()
+        concordance.append((f"...{' '.join([i[0].upper() if i[0]==query else i[0] for i in context])}...", context[0][1]))
+
+    connection.close()
+
+    dt = time.time() - t1
+    print(f"Got concordance (query='{query}') in {dt:.3f} seconds")
+
+    return concordance
