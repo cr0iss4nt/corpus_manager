@@ -114,6 +114,31 @@
     </div>
 
 
+    <div class="row">
+        {% if page > 1 %}
+        <div class="col-2">
+            <form id="previousPageForm" action="/search" method="POST" >
+                <input type="hidden" name="query" value='{{query}}'>
+                <input type="hidden" name="page" value='{{page-1}}'>
+                <button type="submit" class="btn btn-primary">
+                    <i class="bi bi-arrow-left"></i> Пред.
+                </button>
+            </form>
+        </div>
+        {% endif %}
+        {% if page < max_page %}
+        <div class="col-2">
+            <form id="nextPageForm" action="/search" method="POST" >
+                <input type="hidden" name="query" value='{{query}}'>
+                <input type="hidden" name="page" value='{{page+1}}'>
+                <button type="submit" class="btn btn-primary">
+                    След. <i class="bi bi-arrow-right"></i>
+                </button>
+            </form>
+        </div>
+        {% endif %}
+    </div>
+
     {% endif %}
 
 </div>

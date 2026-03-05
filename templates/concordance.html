@@ -10,6 +10,7 @@
 
     <form id="back-to-search-form" method="POST" action="{{ url_for('search') }}">
         <input type="hidden" id="query" name="query" value="{{ query }}">
+        <input type="hidden" id="page" name="page" value="{{ page }}">
         <button type="submit" class="btn btn-warning">
             <i class="bi bi-arrow-left"></i> Вернуться
         </button>
