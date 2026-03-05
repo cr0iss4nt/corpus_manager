@@ -17,6 +17,7 @@
                 <td>
                     <form id="search-inclusions-form" method="POST" action="{{ url_for('search_inclusions') }}">
                         <input type="hidden" id="concordance_query" name="concordance_query" value="{{ word[1] }}">
+                        <input type="hidden" id="book" name="book" value="{{ word[6] }}">
                         <input type="hidden" id="query" name="query" value="{{ query }}">
                         <button type="submit" class="btn btn-info">
                             <i class="bi bi-bookmark"></i>

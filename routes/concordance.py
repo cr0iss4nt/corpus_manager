@@ -8,7 +8,9 @@ from __main__ import app
 @app.route('/concordance/', methods=['POST'])
 def search_inclusions():
     query = request.form['concordance_query']
+    book = request.form['book']
     search_query = request.form['query']
-    concordance = get_concordance(query)
+    concordance = get_concordance(query, book)
     return render_template('concordance.html',
-                           concordance_query=query, query = search_query, concordance=concordance)
+                           concordance_query=query, query=search_query,
+                           book=book, concordance=concordance)

@@ -165,7 +165,7 @@ def db_to_text(words):
     return '\n\n\n'.join(output)
 
 
-def get_concordance(query):
+def get_concordance(query, book):
     connection = sqlite3.connect('corpus.db')
     cursor = connection.cursor()
 
@@ -174,19 +174,19 @@ def get_concordance(query):
     cursor.execute("""
                     SELECT DISTINCT id
                     FROM Corpus
-                    WHERE word = ?
-                    """, (query,))
+                    WHERE word = ? AND book = ?
+                    """, (query,book))
     ids = [int(i[0]) for i in cursor.fetchall()]
 
     concordance = []
     for word_id in ids:
         cursor.execute("""
-                    SELECT DISTINCT word, book
+                    SELECT DISTINCT word
                     FROM Corpus
                     WHERE id BETWEEN ? AND ?
                     """, (word_id - CONTEXT_SIZE, word_id + CONTEXT_SIZE))
         context = cursor.fetchall()
-        concordance.append((f"...{' '.join([i[0].upper() if i[0]==query else i[0] for i in context])}...", context[0][1]))
+        concordance.append(f"...{' '.join([i[0].upper() if i[0]==query else i[0] for i in context])}...",)
 
     connection.close()
 
