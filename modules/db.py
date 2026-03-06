@@ -105,7 +105,7 @@ def add_word(word, lemma, part_of_speech, features, book, connection=None):
         VALUES
         (?, ?, ?, ?, ?)
         ''', (word, lemma, part_of_speech, features, book))
-        print(f"Added word: {word}")
+        print(f"Added word ({book}): {word}")
     except Exception as e:
         print(f"Error adding word: {word}\nError: {e}")
 
@@ -159,10 +159,11 @@ def db_to_text(words):
     output = []
     for word in words:
         output.append(f"""{word[1].upper()}
-Лемма: {word[2]}
-Часть речи: {word[3]}
-Характеристики: {word[4]}
-Источник: {word[5]}""")
+Количество: {word[2]}
+Лемма: {word[3]}
+Часть речи: {word[4]}
+Характеристики: {word[5]}
+Источник: {word[6]}""")
     return '\n\n\n'.join(output)
 
 

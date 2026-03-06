@@ -18,10 +18,8 @@ def clear():
 def export_corpus():
     try:
         query = request.form['query']
-        words, _, _ = db.get_words(query)
-        print(1)
+        words, _, _, _ = db.get_words(query)
         content = db.db_to_text(words)
-        print(2)
 
         from datetime import datetime
         filename = f'corpus_{datetime.today().strftime("%Y%m%d%H%M%S")}.txt'
