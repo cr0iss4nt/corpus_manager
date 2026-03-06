@@ -6,10 +6,10 @@
         </tr>
     </thead>
     <tbody>
-        {% for k, v in frequency.items() %}
+        {% for i in frequency %}
         <tr>
-            <td>{{ k }}</td>
-            <td>{{ v }}</td>
+            <td>{{ i[0] }}</td>
+            <td>{{ i[1] }}</td>
         </tr>
         {% endfor %}
     </tbody>

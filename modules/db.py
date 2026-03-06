@@ -11,6 +11,7 @@ from modules.directory_file_finder import get_files_in_directory
 DATABASE_NAME = 'corpus.db'
 BOOKS_FOLDER = 'books/'
 CONTEXT_SIZE = 5
+PAGE_LIMIT = 100
 
 def init_db():
     connection = sqlite3.connect(DATABASE_NAME)
@@ -41,7 +42,7 @@ def clear_db():
 
     print("Database cleared")
 
-def get_words(query = ''):
+def get_words(query = '', page=1):
     init_db()
 
     connection = sqlite3.connect(DATABASE_NAME)
@@ -55,21 +56,33 @@ def get_words(query = ''):
         WHERE word LIKE ? OR lemma LIKE ?
         GROUP BY word, book
         ORDER BY word_count DESC, word, book
-        """, ('%' + query + '%', '%' + query + '%'))
+        LIMIT ? OFFSET ?
+        """, ('%' + query + '%', '%' + query + '%',
+              PAGE_LIMIT, PAGE_LIMIT * (page-1)))
     words = cursor.fetchall()
-
-    connection.close()
 
     dt = time.time()-t1
     print(f"Fetched words (query='{query}') in {dt:.3f} seconds")
 
-    word_number = sum([int(i[2]) for i in words if query in i[1]])
-    lemma_number = sum([int(i[2]) for i in words if query in i[3]])
-    result_number = sum([int(i[2]) for i in words if query in i[1] or query in i[3]])
+    t2 = time.time()
+    cursor.execute("""
+        SELECT
+            SUM(CASE WHEN word LIKE ? THEN 1 ELSE 0 END) AS word_count,
+            SUM(CASE WHEN lemma LIKE ? THEN 1 ELSE 0 END) AS lemma_count,
+            COUNT(*) AS total_count
+        FROM Corpus
+        WHERE word LIKE ? OR lemma LIKE ?
+    """, ('%' + query + '%', '%' + query + '%', '%' + query + '%', '%' + query + '%'))
+    word_number, lemma_number, result_number = cursor.fetchone()
+
+    dt2 = time.time() - t2
+    print(f"Fetched result numbers (query='{query}') in {dt2:.3f} seconds")
+
+    connection.close()
 
     return words, word_number, lemma_number, result_number
 
-def get_word_features(query = ''):
+def get_word_features(query = '', page=1):
     init_db()
 
     connection = sqlite3.connect(DATABASE_NAME)
@@ -78,11 +91,13 @@ def get_word_features(query = ''):
     t1 = time.time()
 
     cursor.execute("""
-            SELECT DISTINCT word, lemma, part_of_speech, features
-            FROM Corpus
-            WHERE word LIKE ? OR lemma LIKE ?
-            ORDER BY word
-            """, ('%' + query + '%', '%' + query + '%'))
+        SELECT DISTINCT word, lemma, part_of_speech, features
+        FROM Corpus
+        WHERE word LIKE ? OR lemma LIKE ?
+        ORDER BY word
+        LIMIT ? OFFSET ?
+        """, ('%' + query + '%', '%' + query + '%',
+              PAGE_LIMIT, PAGE_LIMIT * (page-1)))
     words = cursor.fetchall()
 
     connection.close()
