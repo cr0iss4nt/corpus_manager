@@ -13,7 +13,6 @@ def clear():
     clear_db()
     return redirect(url_for('index'))
 
-# TODO: fix export
 @app.route('/export', methods=['POST'])
 def export_corpus():
     try:

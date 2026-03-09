@@ -28,6 +28,16 @@ def init_db():
     )
     ''')
 
+    cursor.execute('''
+    CREATE INDEX IF NOT EXISTS idx_concordance
+    ON Corpus(id)
+    ''')
+
+    cursor.execute('''
+    CREATE INDEX IF NOT EXISTS idx_concordance
+    ON Corpus(id)
+    ''')
+
     connection.commit()
     connection.close()
 
@@ -211,3 +221,27 @@ def get_concordance(query, book):
     print(f"Got concordance (query='{query}') in {dt:.3f} seconds")
 
     return concordance
+
+def get_abnormal_words():
+    init_db()
+
+    connection = sqlite3.connect(DATABASE_NAME)
+    cursor = connection.cursor()
+
+    t1 = time.time()
+
+    cursor.execute("""
+            SELECT id, word, COUNT(*) as word_count, lemma, part_of_speech, features, book
+            FROM Corpus
+            WHERE part_of_speech=?
+            GROUP BY word, book
+            ORDER BY word_count DESC, word, book
+            """, ('',))
+    words = cursor.fetchall()
+
+    connection.close()
+
+    dt = time.time() - t1
+    print(f"Fetched abnormal words in {dt:.3f} seconds")
+
+    return words

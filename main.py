@@ -19,6 +19,7 @@ import routes.search
 import routes.info
 import routes.concordance
 import routes.files
+import routes.abnormal_words
 
 
 if __name__ == '__main__':

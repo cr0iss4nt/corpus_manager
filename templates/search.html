@@ -45,11 +45,6 @@
         <input type="hidden" name="query" value='{{query}}'>
     </form>
 
-    {% if result_number > 500 %}
-    <!--<p>Показаны лишь первые 500 результатов для сохранения производительности.</p>-->
-    {% endif %}
-
-
     <script>
     function exportCorpus() {
         // Create form data
@@ -102,7 +97,7 @@
 
     <div class="row">
         <div class="col-6">
-            {% with words=words%}
+            {% with words=words, is_search=1 %}
                 {% include 'words.html'%}
             {% endwith%}
         </div>

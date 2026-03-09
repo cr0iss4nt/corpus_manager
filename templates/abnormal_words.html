@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+{% block title %}Аномальные слова{% endblock %}
+
+{% block content %}
+<div class="container mb-3">
+    <h2>Аномальные слова</h2>
+    <small>Подразумеваются слова в корпусе текстов, часть речи которой не смогла определиться автоматически.</small>
+
+    {% if result_number == 0 %}
+        <p>Аномальных слов в корпусе нет</p>
+    {% else %}
+
+
+    {% with words=words, is_search=0 %}
+        {% include 'words.html'%}
+    {% endwith%}
+
+    {% endif %}
+
+</div>
+{% endblock %}

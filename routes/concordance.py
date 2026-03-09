@@ -11,7 +11,9 @@ def search_inclusions():
     book = request.form['book']
     search_query = request.form['query']
     page = request.form['page']
+    is_search = int(request.form['is_search'])
     concordance = get_concordance(query, book)
     return render_template('concordance.html',
                            concordance_query=query, query=search_query,
-                           book=book, concordance=concordance, page=page)
+                           book=book, concordance=concordance, page=page,
+                           is_search=is_search)
