@@ -15,7 +15,7 @@ def search():
     frequency_middle = (len(frequency)+1)//2
     freq1, freq2 = frequency[:frequency_middle], frequency[frequency_middle:]
 
-    max_page = result_number // PAGE_LIMIT + 1
+    max_page = len(words) // PAGE_LIMIT + 1
 
     return render_template('search.html',
                            query=query, words=words, word_features=word_features,
