@@ -1,20 +1,25 @@
 import nltk
-nltk.download('punkt')
+
+try:
+    nltk.data.find('tokenizers/punkt.zip')
+except LookupError:
+    nltk.download('punkt')
 
 from nltk.tokenize import word_tokenize
 import pymorphy3
 
 import time
 
-RUSSIAN_LETTERS = set('ЙЦУКЕНГШЩЗХЪФЫВАПРОЛДДЖЭЯЧСМИТЬБЮЁйцукенгшщзхъфывапролджэячсмитьбюё')
+#RUSSIAN_LETTERS = set('ЙЦУКЕНГШЩЗХЪФЫВАПРОЛДДЖЭЯЧСМИТЬБЮЁйцукенгшщзхъфывапролджэячсмитьбюё')
 
 
-def is_russian_text(text):
-    return not set(text) - RUSSIAN_LETTERS
+#def is_russian_text(text):
+#    return not set(text) - RUSSIAN_LETTERS
 
 def tokenize_text(text):
     tokens = word_tokenize(text)
-    filtered_tokens = [word for word in tokens if is_russian_text(word)]
+    #filtered_tokens = [word for word in tokens if is_russian_text(word)]
+    filtered_tokens = [word for word in tokens if word.isalnum()]
     return filtered_tokens
 
 def tokens_to_lexemes(tokens, morph: pymorphy3.MorphAnalyzer()):

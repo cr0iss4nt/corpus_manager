@@ -10,7 +10,7 @@ from modules.directory_file_finder import get_files_in_directory
 
 DATABASE_NAME = 'corpus.db'
 BOOKS_FOLDER = 'books/'
-CONTEXT_SIZE = 5
+CONTEXT_SIZE = 7
 PAGE_LIMIT = 100
 
 def init_db():
@@ -149,19 +149,23 @@ def add_words_from_file(filename, morph: pymorphy3.MorphAnalyzer(), connection=N
     clean_filename = filename.split('/')[-1]
     t1 = time.time()
     for lexeme in lexemes:
-        tag = morph.parse(lexeme[0])[0].tag
+        if lexeme[0].isnumeric():
+            add_word(word=lexeme[0], lemma=lexeme[0], part_of_speech='ЧИСЛ',
+                     features='', book=clean_filename, connection=connection)
+        else:
+            tag = morph.parse(lexeme[0])[0].tag
 
-        try:
-            part_of_speech = morph.lat2cyr(tag.POS)
-        except:
-            part_of_speech = ""
-        try:
-            features = morph.lat2cyr(tag).split(' ')[1]
-        except:
-            features = ""
+            try:
+                part_of_speech = morph.lat2cyr(tag.POS)
+            except:
+                part_of_speech = ""
+            try:
+                features = morph.lat2cyr(tag).split(' ')[1]
+            except:
+                features = ""
 
-        add_word(word=lexeme[0], lemma=lexeme[1], part_of_speech=part_of_speech,
-                 features=features, book=clean_filename, connection=connection)
+            add_word(word=lexeme[0], lemma=lexeme[1], part_of_speech=part_of_speech,
+                     features=features, book=clean_filename, connection=connection)
     dt = time.time()-t1
     if not has_outer_connection:
         connection.commit()
