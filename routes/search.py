@@ -9,16 +9,14 @@ from modules.frequency_analyzer import analyze_pos_frequency
 def search():
     query = request.form['query']
     page = int(request.form['page'])
-    words, word_number, lemma_number, result_number = get_words(query, page)
+    words, word_number, lemma_number, result_number, pages_number = get_words(query, page)
     word_features = get_word_features(query, page)
     frequency = analyze_pos_frequency(query)
     frequency_middle = (len(frequency)+1)//2
     freq1, freq2 = frequency[:frequency_middle], frequency[frequency_middle:]
 
-    max_page = len(words) // PAGE_LIMIT + 1
-
     return render_template('search.html',
                            query=query, words=words, word_features=word_features,
                            word_number=word_number, lemma_number=lemma_number,
-                           result_number=result_number, page=page, max_page=max_page,
+                           result_number=result_number, page=page, max_page=pages_number,
                            freq1=freq1, freq2=freq2)
