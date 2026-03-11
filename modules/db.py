@@ -55,7 +55,7 @@ def clear_db():
 import sqlite3
 import time
 
-def get_words(query='', page=1):
+def get_words(query=''):
     init_db()
 
     connection = sqlite3.connect(DATABASE_NAME)
@@ -69,74 +69,28 @@ def get_words(query='', page=1):
         WHERE word LIKE ? OR lemma LIKE ?
         GROUP BY word, book
         ORDER BY word_count DESC, word, book
-        LIMIT ? OFFSET ?
-        """, ('%' + query + '%', '%' + query + '%',
-              PAGE_LIMIT, PAGE_LIMIT * (page-1)))
+        """, ('%' + query + '%', '%' + query + '%'))
     words = cursor.fetchall()
 
     dt = time.time() - t1
     print(f"Fetched words (query='{query}') in {dt:.3f} seconds")
 
-    t2 = time.time()
+    word_number = sum([int(i[2]) for i in words if query in i[1]])
+    lemma_number = sum([int(i[2]) for i in words if query in i[3]])
+    result_number = sum([int(i[2]) for i in words if query in i[1] or query in i[3]])
 
-    cursor.execute("""
-        SELECT
-            SUM(CASE WHEN word LIKE ? THEN 1 ELSE 0 END) AS word_count,
-            SUM(CASE WHEN lemma LIKE ? THEN 1 ELSE 0 END) AS lemma_count,
-            COUNT(*) AS total_count
-        FROM Corpus
-        WHERE word LIKE ? OR lemma LIKE ?
-    """, ('%' + query + '%', '%' + query + '%', '%' + query + '%', '%' + query + '%'))
-    word_number, lemma_number, result_number = cursor.fetchone()
-
-    dt2 = time.time() - t2
-    print(f"Fetched result numbers (query='{query}') in {dt2:.3f} seconds")
-
-    t3 = time.time()
-
-    cursor.execute("""
-        SELECT COUNT(*) FROM (
-            SELECT word, book
-            FROM Corpus
-            WHERE word LIKE ? OR lemma LIKE ?
-            GROUP BY word, book
-        ) AS grouped
-    """, ('%' + query + '%', '%' + query + '%'))
-    total_groups = cursor.fetchone()[0]
-
-    dt3 = time.time() - t3
-    print(f"Fetched group count (query='{query}') in {dt3:.3f} seconds")
-
-    connection.close()
-
-    total_pages = (total_groups + PAGE_LIMIT - 1) // PAGE_LIMIT
+    total_pages = (len(words) + PAGE_LIMIT - 1) // PAGE_LIMIT
 
     return words, word_number, lemma_number, result_number, total_pages
 
-def get_word_features(query = '', page=1):
-    init_db()
-
-    connection = sqlite3.connect(DATABASE_NAME)
-    cursor = connection.cursor()
-
+def get_word_features(words):
     t1 = time.time()
 
-    cursor.execute("""
-        SELECT DISTINCT word, lemma, part_of_speech, features
-        FROM Corpus
-        WHERE word LIKE ? OR lemma LIKE ?
-        ORDER BY word
-        LIMIT ? OFFSET ?
-        """, ('%' + query + '%', '%' + query + '%',
-              PAGE_LIMIT, PAGE_LIMIT * (page-1)))
-    words = cursor.fetchall()
-
-    connection.close()
-
+    word_features = sorted(list(set([(i[1], i[3], i[4], i[5]) for i in words])))
     dt = time.time() - t1
-    print(f"Fetched word features (query='{query}') in {dt:.3f} seconds")
+    print(f"Fetched word features in {dt:.3f} seconds")
 
-    return words
+    return word_features
 
 def add_word(word, lemma, part_of_speech, features, book, connection=None):
     has_outer_connection = True
