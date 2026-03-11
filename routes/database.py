@@ -17,7 +17,7 @@ def clear():
 def export_corpus():
     try:
         query = request.form['query']
-        words, _, _, _ = db.get_words(query)
+        words, _, _, _, _ = db.get_words(query)
         content = db.db_to_text(words)
 
         from datetime import datetime
